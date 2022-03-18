@@ -6,7 +6,6 @@ import { addReading, deleteData, getReadings } from "../SupabaseClient";
 
 const MeasurementsTable = (props) => {
   const [filter, setFilter] = useState("");
-  const [error, setError] = useState(null);
   const [measurementsList, setMeasurementsList] = useState([]);
 
   const filteredReadings = measurementsList.filter(
@@ -19,9 +18,6 @@ const MeasurementsTable = (props) => {
 
   async function measurementsHandleChange(measurement) {
     await addReading(measurement);
-    if (setError === null) {
-      alert("Ups here is somethings wrong. Please try again later.");
-    }
     setMeasurementsList([...measurementsList, measurement]);
   }
 
@@ -33,14 +29,14 @@ const MeasurementsTable = (props) => {
   }, []);
 
   const handleRemove = (reading) => {
-    deleteData(reading)
+    deleteData(reading);
     const newList = measurementsList.filter((r) => r.id !== reading.id);
-        setMeasurementsList(newList);
+    setMeasurementsList(newList);
   };
 
   return (
     <React.Fragment>
-      <MeasurementsForm onAdd={measurementsHandleChange} isValid={error} />
+      <MeasurementsForm onAdd={measurementsHandleChange} />
       <table className={classes.wrappingContainer}>
         <thead>
           <tr className={classes.header}>

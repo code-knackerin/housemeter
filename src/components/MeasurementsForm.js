@@ -5,11 +5,11 @@ import { v4 as uuidv4 } from "uuid";
 const MeasurementsForm = (props) => {
   const [measurementsInput, setMeasurementsInput] = useState({
     date: null,
-    type: null,
+    type: "Electricity",
     value: null,
     id: uuidv4(),
   });
- 
+
   let measurementsCssClass = classes.valueInput;
 
   if (measurementsInput.value != null && measurementsInput.value <= 0) {
@@ -69,6 +69,7 @@ const MeasurementsForm = (props) => {
         className={classes.inputDate}
         onChange={handleDateChange}
         key={uuidv4}
+        value={measurementsInput.date ?? ""}
       ></input>{" "}
       <br />
       <label htmlFor="value" className={classes.lable}>
@@ -80,6 +81,7 @@ const MeasurementsForm = (props) => {
         type="text"
         onChange={handleMeasurementChange}
         className={measurementsCssClass}
+        value={measurementsInput.value ?? ""}
       ></input>
       <br />
       <label htmlFor="lableType" className={classes.lable}>
@@ -92,6 +94,7 @@ const MeasurementsForm = (props) => {
           name="measurementsType"
           className={classes.meterTypeSelect}
           onChange={handleTypeChange}
+          value={measurementsInput.type}
         >
           <option value="Electricity">Electricity</option>
           <option value="Water">Water</option>

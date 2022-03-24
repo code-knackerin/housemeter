@@ -9,7 +9,7 @@ const MeasurementsForm = (props) => {
     value: null,
     id: uuidv4(),
   });
- 
+
   let measurementsCssClass = classes.valueInput;
 
   if (measurementsInput.value != null && measurementsInput.value <= 0) {
@@ -65,6 +65,7 @@ const MeasurementsForm = (props) => {
       <input
         data-testid="inputDate"
         type="date"
+        required="required"
         name="date"
         className={classes.inputDate}
         onChange={handleDateChange}
@@ -78,6 +79,7 @@ const MeasurementsForm = (props) => {
         data-testid="inputfieldvalue"
         name="measurementsInput"
         type="text"
+        required="required"
         onChange={handleMeasurementChange}
         className={measurementsCssClass}
       ></input>
@@ -92,6 +94,7 @@ const MeasurementsForm = (props) => {
           name="measurementsType"
           className={classes.meterTypeSelect}
           onChange={handleTypeChange}
+          required="required"
         >
           <option value="Electricity">Electricity</option>
           <option value="Water">Water</option>

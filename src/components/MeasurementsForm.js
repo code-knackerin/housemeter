@@ -2,6 +2,24 @@ import { useState } from "react";
 import classes from "./MeasurementsForm.module.css";
 import { v4 as uuidv4 } from "uuid";
 
+const typeOptions = ["Electricity", "Water", "Gas"];
+
+const validateMeasurement = ({ date, type, value }) => {
+  let errors = {}; //leeres object
+
+  if (isNaN(Date.parse(date))) {
+    errors.date = "Please fill in a valid date.";
+  }
+  if (!typeOptions.includes(type)) {
+    errors.type = "Please select a value.";
+  }
+  if (isNaN(parseFloat(value))) {
+    errors.value = "Please fill in a valid number.";
+  }
+  console.log(errors, date, value, type);
+  return errors;
+};
+
 const MeasurementsForm = (props) => {
   const [measurementsInput, setMeasurementsInput] = useState({
     date: null,
@@ -10,6 +28,7 @@ const MeasurementsForm = (props) => {
     id: uuidv4(),
   });
 
+  const [errors, setErrors] = useState({});
   let measurementsCssClass = classes.valueInput;
 
   if (measurementsInput.value != null && measurementsInput.value <= 0) {
@@ -17,10 +36,15 @@ const MeasurementsForm = (props) => {
   }
 
   const handleDateChange = (event) => {
-    setMeasurementsInput({
+    const newMeasurementsInput = {
       ...measurementsInput,
       date: event.target.value,
-    });
+    };
+    const errors = validateMeasurement(newMeasurementsInput);
+    if (errors === {}) {
+      setMeasurementsInput(newMeasurementsInput);
+    }
+    setErrors(errors);
   };
 
   const handleMeasurementChange = (event) => {
@@ -28,17 +52,27 @@ const MeasurementsForm = (props) => {
     if (event.target.value !== "") {
       measurementsValue = parseFloat(event.target.value);
     }
-    setMeasurementsInput({
+    const newMeasurementsInput = {
       ...measurementsInput,
       value: measurementsValue,
-    });
+    };
+    const errors = validateMeasurement(newMeasurementsInput);
+    if (errors === {}) {
+      setMeasurementsInput(newMeasurementsInput);
+    }
+    setErrors(errors);
   };
 
   const handleTypeChange = (event) => {
-    setMeasurementsInput({
+    const newMeasurementsInput = {
       ...measurementsInput,
       type: event.target.value,
-    });
+    };
+    const errors = validateMeasurement(newMeasurementsInput);
+    if (errors === {}) {
+      setMeasurementsInput(newMeasurementsInput);
+    }
+    setErrors(errors);
   };
 
   const submitHandler = (event) => {
@@ -59,47 +93,59 @@ const MeasurementsForm = (props) => {
       onSubmit={submitHandler}
       data-testid="form"
     >
-      <label htmlFor="Date" className={classes.lable}>
-        Date
-      </label>
-      <input
-        data-testid="inputDate"
-        type="date"
-        required="required"
-        name="date"
-        className={classes.inputDate}
-        onChange={handleDateChange}
-        key={uuidv4}
-      ></input>{" "}
-      <br />
-      <label htmlFor="value" className={classes.lable}>
-        Measurement
-      </label>
-      <input
-        data-testid="inputfieldvalue"
-        name="measurementsInput"
-        type="text"
-        required="required"
-        onChange={handleMeasurementChange}
-        className={measurementsCssClass}
-      ></input>
-      <br />
-      <label htmlFor="lableType" className={classes.lable}>
-        Type{" "}
-      </label>
-      <div className={classes.selectcontainer}>
-        {" "}
-        <select
-          data-testid="selectInputType"
-          name="measurementsType"
-          className={classes.meterTypeSelect}
-          onChange={handleTypeChange}
-          required="required"
-        >
-          <option value="Electricity">Electricity</option>
-          <option value="Water">Water</option>
-          <option value="Gas">Gas</option>
-        </select>
+      <div className={classes.datawrapper}>
+        <label htmlFor="Date" className={classes.label}>
+          Date
+        </label>
+        <input
+          data-testid="inputDate"
+          type="date"
+          name="date"
+          className={classes.inputDate}
+          onChange={handleDateChange}
+          key={uuidv4}
+        ></input>{" "}
+        {errors.date && (
+          <div className={classes.errormassage}>{errors.date}</div>
+        )}
+      </div>
+      <div className={classes.datawrapper}>
+        <label htmlFor="value" className={classes.lable}>
+          Measurement
+        </label>
+        <input
+          data-testid="inputfieldvalue"
+          name="measurementsInput"
+          type="text"
+          onChange={handleMeasurementChange}
+          className={measurementsCssClass}
+        ></input>
+        {errors.value && (
+          <div className={classes.errormassage}>{errors.value}</div>
+        )}
+      </div>
+      <div className={classes.datawrapper}>
+        <label htmlFor="lableType" className={classes.lable}>
+          Type{" "}
+        </label>
+        <div className={classes.selectcontainer}>
+          {" "}
+          <select
+            data-testid="selectInputType"
+            name="measurementsType"
+            className={classes.meterTypeSelect}
+            onChange={handleTypeChange}
+          >
+            {typeOptions.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+          {errors.type && (
+            <div className={classes.errormassage}>{errors.type}</div>
+          )}
+        </div>
       </div>
       <button type="submit" className={classes.submitButton}>
         Submit
@@ -109,3 +155,5 @@ const MeasurementsForm = (props) => {
 };
 
 export default MeasurementsForm;
+
+//TODO: Submit button disablen

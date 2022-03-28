@@ -75,6 +75,8 @@ const MeasurementsForm = (props) => {
     setErrors(errors);
   };
 
+  const submitEnabled = false;
+
   const submitHandler = (event) => {
     event.preventDefault();
     props.onAdd(measurementsInput);
@@ -147,7 +149,11 @@ const MeasurementsForm = (props) => {
           )}
         </div>
       </div>
-      <button type="submit" className={classes.submitButton}>
+      <button
+        type="submit"
+        className={classes.submitButton}
+        disabled={!submitEnabled}
+      >
         Submit
       </button>
     </form>

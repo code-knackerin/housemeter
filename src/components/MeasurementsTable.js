@@ -33,9 +33,9 @@ const MeasurementsTable = (props) => {
   }, []);
 
   const handleRemove = (reading) => {
-    deleteData(reading)
+    deleteData(reading);
     const newList = measurementsList.filter((r) => r.id !== reading.id);
-        setMeasurementsList(newList);
+    setMeasurementsList(newList);
   };
 
   return (
